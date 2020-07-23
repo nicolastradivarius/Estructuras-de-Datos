@@ -1,0 +1,27 @@
+Trabajo Práctico N°5
+
+Ejercicios TDAMapeo y Diccionario
+
+	1) La interface Map está basada en un mapeo, esto es, una función inyectiva que asocia a cada elemento 
+	de un conjunto de claves (keys) un elemento de un conjunto de valores (values). Luego, los elementos
+	del mapeo son pares (Clave, Valor), también llamadas Entradas (Entries). 
+	A través de sus operaciones se puede consultar la cantidad de entradas, buscar, insertar o remover una
+	de ellas mediante la clave única correspondiente (para insertar una nueva entrada se requiere que no
+	esté repetida en el mapeo). También se pueden generar colecciones iterables para todas las entradas, 
+	para todos los elementos del conjunto de claves, y para todos los elementos del conjunto de valores.
+	
+	2) La interface Dictionary está basada en un diccionario. Por ejemplo, en un diccionario, la letra 'a'
+	está asociada a un montón de palabras que empiezan con dicha letra. Asímismo con el resto de las letras
+	del abecedario. Por tanto, el Dictionary puede poseer claves repetidas asociadas a valores distintos
+	o iguales. En términos de sus operaciones, se puede buscar una entrada en particular, insertar o remover.
+	Además, se pueden generar colecciones iterables para todas las entradas y para todas las entradas REPETIDAS
+	(dada una clave).
+	
+	3) La principal diferencia entre un Mapeo y un Diccionario es que éste último puede almacenar entradas
+	con claves repetidas, mientras que en un Mapeo la clave de una entrada es única. En términos de las
+	operaciones, se puede decir que las diferencias son:
+		-Para buscar: en la interface Map, dada una clave, se busca la entrada asociada a dicha clave, mientras
+		que en Dictionary se tiene una Entrada(clave,valor). 
+		-Para insertar: en la interface Map, dada una clave y un valor, se chequea si existe una 
+		entrada con clave igual a la dada en el mapeo. Caso positivo, se reemplaza el valor de la entrada
+		preexistente con el valor dado.
