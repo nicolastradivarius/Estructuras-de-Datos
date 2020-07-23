@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
 import java.io.BufferedReader;
+import TDAGrafo.*;
+
 
 /**
  * Clase que contiene los métodos solicitados por la sección 3 del Proyecto N°2 de la cátedra Estructuras de Datos, DCIC-UNS.
