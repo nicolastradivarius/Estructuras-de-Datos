@@ -1,6 +1,6 @@
 package TDAGrafo;
 
-public interface Vertex<E> extends Position<E> {
+public interface Vertex<E> extends DecorablePosition<E> {
 
 	
 }

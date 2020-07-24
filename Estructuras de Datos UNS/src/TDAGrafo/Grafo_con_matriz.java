@@ -80,19 +80,6 @@ public class Grafo_con_matriz<V, E> implements Graph<V, E> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ArcoParaMatriz<V, E> checkEdge(Edge<E> e) throws InvalidEdgeException {
-		try {
-			if (e == null | e.element() == null)
-				throw new InvalidEdgeException("Arco inválido");
-
-			return (ArcoParaMatriz<V,E>) e;
-		}
-		catch (ClassCastException err) {
-			throw new InvalidEdgeException("El arco no es de tipo ArcoParaMatriz");
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public Vertex<V>[] endvertices(Edge<E> e) throws InvalidEdgeException {
 		ArcoParaMatriz<V,E> arco = checkEdge(e);
@@ -185,18 +172,6 @@ public class Grafo_con_matriz<V, E> implements Graph<V, E> {
 		return arco;
 	}
 
-	private VerticeParaMatriz<V> checkVertex(Vertex<V> v) throws InvalidVertexException {
-		try {
-			if (v == null | v.element() == null)
-				throw new InvalidVertexException("Vértice inválido");
-
-			return (VerticeParaMatriz<V>) v;
-		}
-		catch (ClassCastException e) {
-			throw new InvalidVertexException("El vértice parametrizado no es del tipo VerticeParaMatriz");
-		}
-	}
-
 	@Override
 	public V removeVertex(Vertex<V> v) throws InvalidVertexException {
 		VerticeParaMatriz<V> a_eliminar = checkVertex(v);
@@ -244,6 +219,31 @@ public class Grafo_con_matriz<V, E> implements Graph<V, E> {
 		}
 
 		return arco.element();
+	}
+
+	@SuppressWarnings("unchecked")
+	private ArcoParaMatriz<V, E> checkEdge(Edge<E> e) throws InvalidEdgeException {
+		try {
+			if (e == null | e.element() == null)
+				throw new InvalidEdgeException("Arco inválido");
+	
+			return (ArcoParaMatriz<V,E>) e;
+		}
+		catch (ClassCastException err) {
+			throw new InvalidEdgeException("El arco no es de tipo ArcoParaMatriz");
+		}
+	}
+
+	private VerticeParaMatriz<V> checkVertex(Vertex<V> v) throws InvalidVertexException {
+		try {
+			if (v == null | v.element() == null)
+				throw new InvalidVertexException("Vértice inválido");
+	
+			return (VerticeParaMatriz<V>) v;
+		}
+		catch (ClassCastException e) {
+			throw new InvalidVertexException("El vértice parametrizado no es del tipo VerticeParaMatriz");
+		}
 	}
 
 }

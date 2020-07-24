@@ -1,6 +1,8 @@
 package TDAGrafo;
 
-public class ArcoParaListaAdyacencias<V, E> implements Edge<E> {
+import TDAMapeo.Mapeo_hash_abierto;
+
+public class ArcoParaListaAdyacencias<V, E> extends Mapeo_hash_abierto<Object, Object> implements Edge<E> {
 	
 	private E rotulo;
 	private VerticeParaListaAdyacencias<V, E> v1, v2;
@@ -60,6 +62,10 @@ public class ArcoParaListaAdyacencias<V, E> implements Edge<E> {
 
 	public void setV2(VerticeParaListaAdyacencias<V, E> v2) {
 		this.v2 = v2;
+	}
+	
+	public String toString() {
+		return v1.toString() + "--" + rotulo + "--" + v2.toString(); 
 	}
 	
 }

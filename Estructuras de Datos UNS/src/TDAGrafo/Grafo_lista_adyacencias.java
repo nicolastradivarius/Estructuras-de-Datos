@@ -1,7 +1,5 @@
 package TDAGrafo;
 
-import TDALista.EmptyListException;
-import TDALista.InvalidPositionException;
 import TDALista.ListaDoblementeEnlazada;
 import TDALista.PositionList;
 
@@ -24,6 +22,12 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 
 	protected PositionList<VerticeParaListaAdyacencias<V,E>> nodos;
 	protected PositionList<ArcoParaListaAdyacencias<V, E>> arcos;
+
+	//para la parte de recorridos:
+	Object VISITADO = new Object();
+	//null --> NOVISITADO 
+	Object ESTADO = new Object();
+	//--------------------
 
 	public Grafo_lista_adyacencias() {
 		nodos = new ListaDoblementeEnlazada<VerticeParaListaAdyacencias<V,E>>();
@@ -67,7 +71,7 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 		VerticeParaListaAdyacencias<V,E> vertice = checkVertex(v);
 		ArcoParaListaAdyacencias<V,E> arco = checkEdge(e);
 		Vertex<V> toReturn = null;
-		
+
 		if (arco.getV1() == vertice) {
 			toReturn = arco.getV2();
 		}
@@ -76,7 +80,7 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 		}
 		else 
 			throw new InvalidVertexException("El vértice parametrizado no es extremo del arco parametrizado");
-		
+
 		return toReturn;
 	}
 
@@ -85,10 +89,10 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 	public Vertex<V>[] endvertices(Edge<E> e) throws InvalidEdgeException {
 		ArcoParaListaAdyacencias<V,E> arco = checkEdge(e);
 		Vertex<V>[] arreglo_extremos = (Vertex<V>[]) new VerticeParaListaAdyacencias[2];
-		
+
 		arreglo_extremos[0] = arco.getV1();
 		arreglo_extremos[1] = arco.getV2();
-		
+
 		return arreglo_extremos;
 	}
 
@@ -97,28 +101,28 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 		VerticeParaListaAdyacencias<V,E> v1 = checkVertex(v);
 		VerticeParaListaAdyacencias<V,E> v2 = checkVertex(w);
 		boolean sonAdyacentes = false;
-		
+
 		for (ArcoParaListaAdyacencias<V,E> caminante : this.arcos) {
 			if (caminante.getV1() == v1 && caminante.getV2() == v2) {
 				sonAdyacentes = true;
 				break;
 			}
 		}
-		
+
 		return sonAdyacentes;
-		
+
 	}
 
 	@Override
 	public V replace(Vertex<V> v, V x) throws InvalidVertexException {
 		if (x == null)
 			throw new InvalidVertexException("El rótulo que se quiere emplazar en el vértice es nulo");
-		
+
 		VerticeParaListaAdyacencias<V,E> vertice = checkVertex(v);
 		V valorViejo = vertice.element();
-		
+
 		vertice.setRotulo(x);
-		
+
 		return valorViejo;
 	}
 
@@ -156,7 +160,7 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 			arco.setPosicionEnArcos(arcos.last());
 
 		}
-		catch (EmptyListException err) {
+		catch (TDALista.EmptyListException err) {
 			err.printStackTrace();
 		}
 
@@ -172,16 +176,16 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 			for (ArcoParaListaAdyacencias<V,E> caminante : a_remover.getAdyacentes()) {
 				removeEdge(caminante);
 			}
-			
+
 			valorViejo = a_remover.element();
 			a_remover.setRotulo(null);
 			nodos.remove(a_remover.getPosicionEnNodos());
-			
+
 		}
-		catch (InvalidEdgeException | InvalidPositionException err) {
+		catch (InvalidEdgeException | TDALista.InvalidPositionException err) {
 			err.printStackTrace();
 		}
-		
+
 		return valorViejo;
 	}
 
@@ -206,7 +210,7 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 			a_remover.setPosicionEnlv2(null);
 			this.arcos.remove(a_remover.getPosicionEnArcos());
 		}
-		catch (InvalidPositionException err) {
+		catch (TDALista.InvalidPositionException err) {
 			err.printStackTrace();
 		}
 
@@ -227,6 +231,84 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 		}
 	}
 
+	//recorrido en profundidad
+	public void dfs() {
+
+		try {
+			for (VerticeParaListaAdyacencias<V,E> v : this.nodos) {
+				v.put(ESTADO, null);
+			}
+			for (VerticeParaListaAdyacencias<V,E> w : nodos) {
+				if (w.get(ESTADO) == null)
+					dfs_aux(w);
+			}
+		}
+		catch (TDAMapeo.InvalidKeyException err) {
+			err.printStackTrace();
+		}
+
+	}
+
+	private void dfs_aux(Vertex<V> v) {
+		System.out.print(v.element() + ", ");
+
+		try {
+			v.put(ESTADO, VISITADO);
+			Iterable<Edge<E>> ady = this.incidentEdges(v);
+
+			for(Edge<E> e : ady) {
+				Vertex<V> w = this.opposite(v, e);
+				if (w.get(ESTADO) == null)
+					dfs_aux(w);
+			}
+
+		} 
+		catch (TDAMapeo.InvalidKeyException | InvalidVertexException | InvalidEdgeException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void bfs() {
+		try {
+			for (VerticeParaListaAdyacencias<V,E> v : this.nodos) {
+				v.put(ESTADO, null);
+			}
+			for (VerticeParaListaAdyacencias<V,E> w : this.nodos) {
+				if (w.get(ESTADO) == null)
+					bfs_aux(w);
+			}
+		}
+		catch (TDAMapeo.InvalidKeyException err) {
+			err.printStackTrace();
+		}
+	}
+
+	//corroborar
+	private void bfs_aux(VerticeParaListaAdyacencias<V,E> v) {
+		TDACola.Queue<Vertex<V>> cola = new TDACola.Cola_con_enlaces<>();
+		try {
+			cola.enqueue(v);
+			v.put(ESTADO, VISITADO);
+
+			while (!cola.isEmpty()) {
+				Vertex<V> u = cola.dequeue();
+				System.out.print(u.element() + ", ");
+				
+				for (Edge<E> arco : u.getAdyacentes()) {
+					Vertex<V> x = this.opposite(u, arco);
+					if (x.get(ESTADO) == null) {
+						x.put(ESTADO, VISITADO);
+						cola.enqueue(x);
+					}
+				}
+			}
+		}
+		catch (TDACola.EmptyQueueException | TDAMapeo.InvalidKeyException | InvalidVertexException | InvalidEdgeException err) {
+			err.printStackTrace();
+		}
+
+	}
+
 	@SuppressWarnings("unchecked")
 	private ArcoParaListaAdyacencias<V, E> checkEdge(Edge<E> e) throws InvalidEdgeException {
 		try {
@@ -239,32 +321,35 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 			throw new InvalidEdgeException("El arco no es de tipo ArcoParaListaAdyacencias");
 		}
 	}
-	
-	public String toString() {
-		String salida = "";
-		for (VerticeParaListaAdyacencias<V,E> v : nodos) {
-			salida += v.rotulo + "----";
-		}
-		
-		return salida;
-	}
 
 	public static void main(String[] args) {
 
-		Graph<Character, Character> g1 = new Grafo_lista_adyacencias<>();
-		
-		Vertex<Character> h1 = g1.insertVertex('u');
-		Vertex<Character> h2 = g1.insertVertex('v');
-		Vertex<Character> h3 = g1.insertVertex('w');
-		
+		Grafo_lista_adyacencias<Character, Integer> g1 = new Grafo_lista_adyacencias<>();
+
+
 		try {
-			g1.removeVertex(h2);
+			Vertex<Character> h1 = g1.insertVertex('u');
+			Vertex<Character> h2 = g1.insertVertex('v');
+			Vertex<Character> h3 = g1.insertVertex('w');
+			Vertex<Character> h4 = g1.insertVertex('x');
+
+			Edge<Integer> a1 = g1.insertEdge(h1, h2, 5);
+			Edge<Integer> a2 = g1.insertEdge(h2, h3, 7);
+			Edge<Integer> a3 = g1.insertEdge(h3, h1, 13);
+			Edge<Integer> a4 = g1.insertEdge(h2, h4, 42);
+
+
+			System.out.println(g1.vertices().toString());
+			System.out.println(g1.edges().toString());
+
+			g1.dfs();
+			System.out.println();
+			g1.bfs();
+
 		} catch (InvalidVertexException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		System.out.println(g1.toString());
+
 	}
 
 }

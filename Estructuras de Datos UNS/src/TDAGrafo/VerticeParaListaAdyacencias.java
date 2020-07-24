@@ -2,8 +2,9 @@ package TDAGrafo;
 
 import TDALista.ListaDoblementeEnlazada;
 import TDALista.PositionList;
+import TDAMapeo.Mapeo_hash_abierto;
 
-public class VerticeParaListaAdyacencias<V, E> implements Vertex<V> {
+public class VerticeParaListaAdyacencias<V, E> extends Mapeo_hash_abierto<Object, Object> implements Vertex<V> {
 	
 	protected TDALista.Position<VerticeParaListaAdyacencias<V, E>> posicionEnListaVertices;
 	protected V rotulo;
@@ -35,4 +36,7 @@ public class VerticeParaListaAdyacencias<V, E> implements Vertex<V> {
 		return this.posicionEnListaVertices;
 	}
 
+	public String toString() {
+		return "(" + rotulo + ")";
+	}
 }
