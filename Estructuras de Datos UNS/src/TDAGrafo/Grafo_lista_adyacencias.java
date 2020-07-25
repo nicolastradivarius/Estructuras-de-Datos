@@ -293,8 +293,8 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 			while (!cola.isEmpty()) {
 				Vertex<V> u = cola.dequeue();
 				System.out.print(u.element() + ", ");
-				
-				for (Edge<E> arco : u.getAdyacentes()) {
+
+				for (Edge<E> arco : incidentEdges(u)) {
 					Vertex<V> x = this.opposite(u, arco);
 					if (x.get(ESTADO) == null) {
 						x.put(ESTADO, VISITADO);
@@ -306,7 +306,27 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 		catch (TDACola.EmptyQueueException | TDAMapeo.InvalidKeyException | InvalidVertexException | InvalidEdgeException err) {
 			err.printStackTrace();
 		}
+	}
 
+	public void eliminar_rotulo(V r) {
+		try {
+			TDALista.Position<VerticeParaListaAdyacencias<V,E>> caminante = (nodos.isEmpty()) ? null : this.nodos.first();
+
+
+			while (caminante != null) {
+				if (caminante.element().element().equals(r)) {
+					TDALista.Position<VerticeParaListaAdyacencias<V,E>> aux = caminante;
+					caminante = (this.nodos.last() == caminante) ? null : nodos.next(caminante);
+					this.removeVertex(aux.element());
+				}
+				else {
+					caminante = (this.nodos.last() == caminante) ? null : nodos.next(caminante);
+				}
+			}
+		}
+		catch (TDALista.InvalidPositionException | TDALista.EmptyListException | TDALista.BoundaryViolationException | InvalidVertexException err) {
+			err.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -331,20 +351,29 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 			Vertex<Character> h1 = g1.insertVertex('u');
 			Vertex<Character> h2 = g1.insertVertex('v');
 			Vertex<Character> h3 = g1.insertVertex('w');
-			Vertex<Character> h4 = g1.insertVertex('x');
+			Vertex<Character> h4 = g1.insertVertex('w');
+			Vertex<Character> h5 = g1.insertVertex('w');
+			Vertex<Character> h6 = g1.insertVertex('y');
 
 			Edge<Integer> a1 = g1.insertEdge(h1, h2, 5);
 			Edge<Integer> a2 = g1.insertEdge(h2, h3, 7);
 			Edge<Integer> a3 = g1.insertEdge(h3, h1, 13);
 			Edge<Integer> a4 = g1.insertEdge(h2, h4, 42);
+			Edge<Integer> a5 = g1.insertEdge(h2, h5, 32);
+			Edge<Integer> a6 = g1.insertEdge(h2, h4, 672);
+			Edge<Integer> a7 = g1.insertEdge(h5, h3, 12);
+			Edge<Integer> a8 = g1.insertEdge(h2, h6, 42);
 
 
+			g1.eliminar_rotulo('w');
+			
 			System.out.println(g1.vertices().toString());
 			System.out.println(g1.edges().toString());
-
+			
 			g1.dfs();
 			System.out.println();
 			g1.bfs();
+			System.out.println();
 
 		} catch (InvalidVertexException e) {
 			e.printStackTrace();

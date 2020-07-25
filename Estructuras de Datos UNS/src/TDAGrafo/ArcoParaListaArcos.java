@@ -1,6 +1,8 @@
 package TDAGrafo;
 
-public class ArcoParaListaArcos<V, E> implements Edge<E> {
+import TDAMapeo.Mapeo_hash_abierto;
+
+public class ArcoParaListaArcos<V, E> extends Mapeo_hash_abierto<Object, Object> implements Edge<E> {
 	
 	protected E rotulo;
 	protected TDALista.Position<ArcoParaListaArcos<V,E>> posicionEnListaArco;

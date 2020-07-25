@@ -1,6 +1,8 @@
 package TDAGrafo;
 
-public class DArcoParaListaAdyacencias<V, E> implements Edge<E> {
+import TDAMapeo.Mapeo_hash_abierto;
+
+public class DArcoParaListaAdyacencias<V, E> extends Mapeo_hash_abierto<Object, Object> implements Edge<E> {
 
 	protected E rotulo;
 	protected DVerticeParaListaAdyacencias<V,E> v1, v2;

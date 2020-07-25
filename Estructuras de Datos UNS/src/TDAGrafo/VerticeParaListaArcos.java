@@ -1,6 +1,8 @@
 package TDAGrafo;
 
-public class VerticeParaListaArcos<V> implements Vertex<V> {
+import TDAMapeo.Mapeo_hash_abierto;
+
+public class VerticeParaListaArcos<V> extends Mapeo_hash_abierto<Object, Object> implements Vertex<V> {
 
 	protected TDALista.Position<VerticeParaListaArcos<V>> posicionEnListaVertices;
 	protected V rotulo;

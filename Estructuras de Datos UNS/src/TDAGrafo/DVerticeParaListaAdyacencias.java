@@ -1,6 +1,8 @@
 package TDAGrafo;
 
-public class DVerticeParaListaAdyacencias<V, E> implements Vertex<V> {
+import TDAMapeo.Mapeo_hash_abierto;
+
+public class DVerticeParaListaAdyacencias<V, E> extends Mapeo_hash_abierto<Object, Object> implements Vertex<V> {
 
 	protected V rotulo;
 	protected TDALista.Position<DVerticeParaListaAdyacencias<V,E>> posicionEnListaVertices;

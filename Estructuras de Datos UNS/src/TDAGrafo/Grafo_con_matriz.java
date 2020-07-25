@@ -29,7 +29,7 @@ public class Grafo_con_matriz<V, E> implements Graph<V, E> {
 
 	@Override
 	public Iterable<Vertex<V>> vertices() {
-		PositionList<Vertex<V>> lista_vertices = new ListaDoblementeEnlazada<Vertex<V>>();
+		PositionList<Vertex<V>> lista_vertices = new ListaDoblementeEnlazada<>();
 
 		for (Vertex<V> caminante : this.vertices) {
 			lista_vertices.addLast(caminante);
@@ -124,6 +124,8 @@ public class Grafo_con_matriz<V, E> implements Graph<V, E> {
 		try {
 			this.vertices.addLast(vertice);
 			vertice.setPosicionEnVertices(vertices.last());
+			cantidadVertices++;
+			vertice.setIndice(cantidadVertices);
 		}
 		catch (TDALista.EmptyListException err) {
 			err.printStackTrace();
@@ -151,9 +153,8 @@ public class Grafo_con_matriz<V, E> implements Graph<V, E> {
 		VerticeParaMatriz<V> v2 = checkVertex(w);
 		int fila = v1.getIndice();
 		int columna = v2.getIndice();
-		ArcoParaMatriz<V,E> arco = new ArcoParaMatriz<>();
+		ArcoParaMatriz<V,E> arco = new ArcoParaMatriz<>(e);
 
-		arco.setRotulo(e);
 		arco.setV1(v1);
 		arco.setV2(v2);
 		//grafo no dirigido => matriz simetrica

@@ -6,7 +6,7 @@ import TDAMapeo.Mapeo_hash_abierto;
 
 public class VerticeParaListaAdyacencias<V, E> extends Mapeo_hash_abierto<Object, Object> implements Vertex<V> {
 	
-	protected TDALista.Position<VerticeParaListaAdyacencias<V, E>> posicionEnListaVertices;
+	protected TDALista.Position<VerticeParaListaAdyacencias<V,E>> posicionEnListaVertices;
 	protected V rotulo;
 	protected PositionList<ArcoParaListaAdyacencias<V,E>> adyacentes;
 
@@ -24,11 +24,11 @@ public class VerticeParaListaAdyacencias<V, E> extends Mapeo_hash_abierto<Object
 		rotulo = nuevoRotulo;
 	}
 	
-	public PositionList<ArcoParaListaAdyacencias<V, E>> getAdyacentes() {
+	public PositionList<ArcoParaListaAdyacencias<V,E>> getAdyacentes() {
 		return adyacentes;
 	}
 	
-	public void setPositionEnNodos(TDALista.Position<VerticeParaListaAdyacencias<V, E>> p) {
+	public void setPositionEnNodos(TDALista.Position<VerticeParaListaAdyacencias<V,E>> p) {
 		this.posicionEnListaVertices = p;
 	}
 	
