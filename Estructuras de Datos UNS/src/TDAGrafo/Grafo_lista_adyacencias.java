@@ -231,6 +231,19 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	private ArcoParaListaAdyacencias<V, E> checkEdge(Edge<E> e) throws InvalidEdgeException {
+		try {
+			if (e == null || e.element() == null)
+				throw new InvalidEdgeException("Arco inválido");
+	
+			return (ArcoParaListaAdyacencias<V, E>) e;
+		}
+		catch (ClassCastException err) {
+			throw new InvalidEdgeException("El arco no es de tipo ArcoParaListaAdyacencias");
+		}
+	}
+
 	//recorrido en profundidad
 	public void dfs() {
 
@@ -326,19 +339,6 @@ public class Grafo_lista_adyacencias<V, E> implements Graph<V, E> {
 		}
 		catch (TDALista.InvalidPositionException | TDALista.EmptyListException | TDALista.BoundaryViolationException | InvalidVertexException err) {
 			err.printStackTrace();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private ArcoParaListaAdyacencias<V, E> checkEdge(Edge<E> e) throws InvalidEdgeException {
-		try {
-			if (e == null || e.element() == null)
-				throw new InvalidEdgeException("Arco inválido");
-
-			return (ArcoParaListaAdyacencias<V, E>) e;
-		}
-		catch (ClassCastException err) {
-			throw new InvalidEdgeException("El arco no es de tipo ArcoParaListaAdyacencias");
 		}
 	}
 
