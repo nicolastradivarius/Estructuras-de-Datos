@@ -1,6 +1,9 @@
 package Operaciones;
 
 import TDAGrafo.*;
+import TDALista.ListaDoblementeEnlazada;
+import TDALista.PositionList;
+import TDAMapeo.InvalidKeyException;
 
 public class Operaciones_con_grafos {
 
@@ -27,6 +30,11 @@ public class Operaciones_con_grafos {
 			Edge<Integer> a5 = g1.insertEdge(h2, h5, 32);
 			Edge<Integer> a7 = g1.insertEdge(h5, h3, 12);
 			Edge<Integer> a8 = g1.insertEdge(h2, h6, 42);
+
+			System.out.println(hallarCamino(g1, h5, h6));
+
+			System.out.println(hallarCiclo(g1, h1).toString());
+
 		}
 		catch (InvalidVertexException err) {
 			err.printStackTrace();
@@ -108,5 +116,94 @@ public class Operaciones_con_grafos {
 		catch (TDAMapeo.InvalidKeyException | InvalidVertexException | InvalidEdgeException | TDACola.EmptyQueueException err) {
 			err.printStackTrace();
 		}
+	}
+
+	public static <V,E> boolean hallarCamino(Graph<V,E> g, Vertex<V> origen, Vertex<V> destino) {
+		PositionList<Vertex<V>> camino = new ListaDoblementeEnlazada<>();
+		boolean existeCamino = false;
+
+		try {
+			for (Vertex<V> v : g.vertices()) {
+				v.put(ESTADO, null);
+			}
+		}
+		catch (Exception err) {
+			err.printStackTrace();
+		}
+
+		existeCamino = hallarCamino_aux(g, origen, destino, camino, existeCamino);
+
+		return existeCamino;
+	}
+
+
+	private static <V,E> boolean hallarCamino_aux(Graph<V, E> g, Vertex<V> origen, Vertex<V> destino, PositionList<Vertex<V>> camino,
+			boolean existe) {
+		try {
+			origen.put(ESTADO, VISITADO);
+			camino.addLast(origen);
+
+			if (origen == destino) {
+				existe = true;
+			}
+			else {
+				for (Edge<E> arcos_origen : g.incidentEdges(origen)) {
+					Vertex<V> v = g.opposite(origen, arcos_origen);
+
+					if (v.get(ESTADO) == null) {
+						boolean encontre = hallarCamino_aux(g, v, destino, camino, existe);
+
+						if (encontre) {
+							existe = true;
+							break;
+						}
+					}
+				}
+			}
+
+		}
+		catch (TDAMapeo.InvalidKeyException | InvalidVertexException | InvalidEdgeException err) {
+			err.printStackTrace();
+		}
+
+		return existe;
+	}
+
+
+	public static <V,E> PositionList<Vertex<V>> hallarCiclo(Graph<V,E> g, Vertex<V> v){
+		PositionList<Vertex<V>> ciclo = new ListaDoblementeEnlazada<Vertex<V>>();
+
+		return hallarCiclo_aux(g, v, ciclo);
+	}
+
+
+	private static <V,E> PositionList<Vertex<V>> hallarCiclo_aux(Graph<V, E> g, Vertex<V> v, PositionList<Vertex<V>> ciclo) {
+		boolean encontre = false;
+		PositionList<Vertex<V>> camino = new ListaDoblementeEnlazada<>();
+		try {
+			for (Edge<E> arco : g.incidentEdges(v)) {
+				if (!encontre) {
+					Vertex<V> w = g.opposite(v, arco);
+					encontre = hallarCamino(g, w, v);
+					camino.addLast(w);
+				}
+				else
+					break;
+			}
+
+			ciclo = new ListaDoblementeEnlazada<>();
+
+			if (encontre) {
+				ciclo.addLast(v);
+				for (Vertex<V> x : camino) {
+					ciclo.addLast(x);
+				}
+			}
+		}
+		catch (InvalidVertexException | InvalidEdgeException err) {
+			err.printStackTrace();
+		}
+
+		return ciclo;
 	}
 }

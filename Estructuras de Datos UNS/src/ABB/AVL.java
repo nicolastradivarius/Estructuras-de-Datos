@@ -2,7 +2,7 @@ package ABB;
 
 import java.util.Comparator;
 
-public class AVL<E> {
+public class AVL<E extends Comparable<E>> {
 
 	private NodoAVL<E> raiz;
 	private Comparator<E> comp;
@@ -10,6 +10,33 @@ public class AVL<E> {
 	public AVL(Comparator<E> comp) {
 		raiz = new NodoAVL<E>(null);
 		this.comp = comp;
+	}
+	
+	public NodoAVL<E> getRaiz(){
+		return raiz;
+	}
+	
+	public NodoAVL<E> buscar(E x){
+		NodoAVL<E> buscado = null;
+		return buscar_aux(x, raiz, buscado);
+	}
+
+	private NodoAVL<E> buscar_aux(E x, NodoAVL<E> p, NodoAVL<E> buscado) {
+		
+		if (p.getRotulo() == null) {
+			buscado = p;
+		}
+		else {
+			int c = comp.compare(x, p.getRotulo());
+			if (c == 0) 
+				buscado = p;
+			else if (c < 0)
+				buscado = buscar_aux(x, p.getHijoizq(), buscado);
+			else
+				buscado = buscar_aux(x, p.getHijoder(), buscado);
+		}
+		
+		return buscado;
 	}
 
 	//recorre el arbol recursivamente desde la raiz con un metodo auxiliar
@@ -61,25 +88,25 @@ public class AVL<E> {
 				//Caso simetrico pero insertando hacia la derecha
 				//luego testeo por rotaciones (III) e (IV) para ver cual se hace
 				insert_aux(p.getHijoder(), item);
-				
+
 				if (Math.abs(p.getHijoizq().getAltura() - p.getHijoder().getAltura()) > 1 ) {
 					//rebalancear mediante rotaciones (III) o (IV)
 					//si estoy acá ==> item > x, debo testear si (item <y) o (item > y)
 					//si (item < y) ==> z es hijo izq de y ==> rotacion(IV)
 					//si (item > y) ==> z es hijo der de y ==> rotacion(III)
-					
+
 					E y = p.getHijoder().getRotulo();
-					
+
 					int comp_item_y = comp.compare(item, y);
-					
+
 					if (comp_item_y < 0)
 						rotacion_IV(p); //(item < y)
 					else
 						rotacion_III(p); //(item > y)
 				}
-				
+
 			}
-			
+
 			//actualizo la altura de p
 			p.setAltura(max(p.getHijoizq().getAltura(), p.getHijoder().getAltura()) +1);;
 		}
@@ -93,22 +120,22 @@ public class AVL<E> {
 		NodoAVL<E> raiz_t2 = z.getHijoder();
 		NodoAVL<E> raiz_t3 = y.getHijoder();
 		NodoAVL<E> raiz_t4 = x.getHijoder();
-		
+
 		x.setHijoizq(raiz_t3);
 		y.setHijoder(x);
-		
+
 		if (x.getPadre() != null) {
 			if (x.getPadre().getHijoizq() == x)
 				x.getPadre().setHijoizq(y);
 			else
 				x.getPadre().setHijoder(y);
 		}
-		
+
 		y.setPadre(x.getPadre());
 		z.setPadre(y);
 		x.setPadre(y);
 	}
-	
+
 	private void rotacion_II (NodoAVL<E> p) {
 		NodoAVL<E> x = p;
 		NodoAVL<E> y = x.getHijoizq();
@@ -117,25 +144,25 @@ public class AVL<E> {
 		NodoAVL<E> raiz_t2 = z.getHijoizq();
 		NodoAVL<E> raiz_t3 = z.getHijoder();
 		NodoAVL<E> raiz_t4 = x.getHijoder();
-		
+
 		y.setHijoder(raiz_t2);
 		x.setHijoizq(raiz_t3);
 		z.setHijoizq(y);
 		z.setHijoder(x);
-		
+
 		if (x.getPadre() != null) {
 			if (x.getPadre().getHijoizq() == x)
 				x.getPadre().setHijoizq(z);
 			else
 				x.getPadre().setHijoder(z);
 		}
-		
+
 		z.setPadre(x.getPadre());
 		x.setPadre(z);
 		y.setPadre(z);
-		
+
 	}
-	
+
 	private void rotacion_III (NodoAVL<E> p) {
 		NodoAVL<E> x = p;
 		NodoAVL<E> y = p.getHijoder();
@@ -144,23 +171,23 @@ public class AVL<E> {
 		NodoAVL<E> raiz_t2 = y.getHijoizq();
 		NodoAVL<E> raiz_t3 = z.getHijoizq();
 		NodoAVL<E> raiz_t4 = z.getHijoder();
-		
-		
+
+
 		x.setHijoder(raiz_t2);
 		y.setHijoizq(x);
-		
+
 		if (x.getPadre() != null) {
 			if (x.getPadre().getHijoizq() == x)
 				x.getPadre().setHijoizq(y);
 			else
 				x.getPadre().setHijoder(y);
 		}
-		
+
 		y.setPadre(x.getPadre());
 		z.setPadre(y);
 		x.setPadre(y);
 	}
-	
+
 	private void rotacion_IV (NodoAVL<E> p) {
 		NodoAVL<E> x = p;
 		NodoAVL<E> y = x.getHijoder();
@@ -169,20 +196,20 @@ public class AVL<E> {
 		NodoAVL<E> raiz_t2 = z.getHijoizq();
 		NodoAVL<E> raiz_t3 = z.getHijoder();
 		NodoAVL<E> raiz_t4 = y.getHijoder();
-		
+
 		x.setHijoder(raiz_t2);
 		y.setHijoizq(raiz_t3);
-		
+
 		z.setHijoizq(x);
 		z.setHijoder(y);
-		
+
 		if (x.getPadre() != null) {
 			if (x.getPadre().getHijoizq() == x)
 				x.getPadre().setHijoizq(z);
 			else
 				x.getPadre().setHijoder(z);
 		}
-		
+
 		z.setPadre(x.getPadre());
 		x.setPadre(z);
 		y.setPadre(z);
@@ -191,4 +218,26 @@ public class AVL<E> {
 	public int max(int i, int j) {
 		return i>j ? i : j;
 	}
+
+	//remover lazy
+	public void remover(E e) {
+		remover_aux(raiz, e);
+	}
+
+	private void remover_aux(NodoAVL<E> p, E item) {
+
+		if (p.getRotulo() != null) {
+			int comparacion = comp.compare(item, p.getRotulo());
+
+			if (comparacion == 0) {
+				p.setEliminado(true);
+			}
+			else if (comparacion < 0) {
+				remover_aux(p.getHijoizq(), item);
+			}
+			else
+				remover_aux(p.getHijoder(), item);
+		}
+	}
+
 }

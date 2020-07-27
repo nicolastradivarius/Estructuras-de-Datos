@@ -37,10 +37,12 @@ public class MapABB<K extends Comparable<K>, V> implements Map<K,V> {
 	public int size() {
 		return tamanyo;
 	}
+	
 	@Override
 	public boolean isEmpty() {
 		return tamanyo == 0;
 	}
+	
 	@Override
 	public V get(K key) throws InvalidKeyException {
 		NodoABB<EntradaComparable<K, V>> nodo;
@@ -57,6 +59,7 @@ public class MapABB<K extends Comparable<K>, V> implements Map<K,V> {
 
 		return valorAsociado;
 	}
+	
 	@Override
 	public V put(K key, V value) throws InvalidKeyException {
 		EntradaComparable<K,V> entrada;
@@ -82,6 +85,7 @@ public class MapABB<K extends Comparable<K>, V> implements Map<K,V> {
 
 		return a_retornar;
 	}
+	
 	@Override
 	public V remove(K key) throws InvalidKeyException {
 		EntradaComparable<K,V> entrada;
@@ -102,6 +106,8 @@ public class MapABB<K extends Comparable<K>, V> implements Map<K,V> {
 		
 		return a_retornar;
 	}
+	
+	
 	@Override
 	public Iterable<K> keys() {
 		PositionList<K> lista_de_claves = new ListaDoblementeEnlazada<K>();
@@ -114,6 +120,7 @@ public class MapABB<K extends Comparable<K>, V> implements Map<K,V> {
 		
 		return lista_de_claves;
 	}
+	
 	@Override
 	public Iterable<V> values() {
 		PositionList<V> lista_de_valores = new ListaDoblementeEnlazada<V>();
@@ -126,6 +133,7 @@ public class MapABB<K extends Comparable<K>, V> implements Map<K,V> {
 		
 		return lista_de_valores;
 	}
+	
 	@Override
 	public Iterable<Entry<K, V>> entries() {
 		PositionList<Entry<K, V>> lista_entradas = new ListaDoblementeEnlazada<Entry<K,V>>();

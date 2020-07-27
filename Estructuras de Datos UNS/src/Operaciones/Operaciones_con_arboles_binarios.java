@@ -457,4 +457,48 @@ public class Operaciones_con_arboles_binarios {
 	public static <E> BinaryTree<E> clonar_arbol_perfecto(int h, PositionList<E> l) {
 		return null;
 	}
+	
+	public <E> boolean es_AVL(BinaryTree<E> b) {
+		boolean es_avl = true;
+		try {
+			TDAArbolBinario.Position<E> root = b.root();
+			es_avl = es_AVL_aux(b, root);
+		}
+		catch (TDAArbolBinario.EmptyTreeException err) {
+			err.printStackTrace();
+		}
+
+		return es_avl;
+	}
+
+	private <E> boolean es_AVL_aux(BinaryTree<E> b, Position<E> p) {
+		boolean esavl = true;
+
+		try {
+			if (b.hasLeft(p)) {
+				if (b.hasRight(p)) {
+					if (Math.abs(altura(b, b.left(p)) - altura(b, b.right(p))) > 1) {
+						esavl = false;
+					}
+				}
+				else {
+					if (Math.abs(altura(b, b.left(p)) - 0) > 1) {
+						esavl = false;
+					}
+				}
+			}
+			else {
+				if (b.hasRight(p)) {
+					if (Math.abs(0 - altura(b, b.right(p))) > 1) {
+						esavl = false;
+					}
+				}
+			}
+		}
+		catch (TDAArbolBinario.InvalidPositionException | BoundaryViolationException err) {
+			err.printStackTrace();
+		}
+		
+		return esavl;
+	}
 }
