@@ -1,58 +1,18 @@
 package Operaciones;
 
 import TDAArbolBinario.*;
+import TDACola.EmptyQueueException;
+import TDACola.Queue;
+import TDAColaCP.PriorityQueue;
 import TDALista.PositionList;
+import TDAMapeo.Entry;
+import TDAMapeo.InvalidKeyException;
+import TDAMapeo.Map;
+import TDAMapeo.Mapeo_con_lista;
 import TDALista.ListaDoblementeEnlazada;
 import TDAPila.*;
 
 public class Operaciones_con_arboles_binarios {
-
-	public static void main(String args[]) {
-		ArbolBinarioEnlazado<Integer> b1 = new ArbolBinarioEnlazado<Integer>();
-		try {
-
-			Position<Integer> h0 = b1.createRoot(2);
-			Position<Integer> h1 = b1.addLeft(h0, 66);
-			Position<Integer> h2 = b1.addRight(h0, 62);
-			Position<Integer> h3 = b1.addLeft(h2, 929);
-			Position<Integer> h5 = b1.addRight(h3, 7532);
-			Position<Integer> h8 = b1.addLeft(h3, 2452);
-			Position<Integer> h10 = b1.addRight(h8, 555543);
-			Position<Integer> h6 = b1.addLeft(h5, 42032);
-			Position<Integer> h7 = b1.addLeft(h1, 1145);
-
-			/*preorden(b1);
-			System.out.println("-----------------------------");
-			postorden(b1);
-			System.out.println("-----------------------------");
-			por_niveles(b1);
-			System.out.println("-----------------------------");
-			System.out.println("Profundidad del nodo" + " " + "h0" + " " + "en el árbol T: " + profundidad(b1, b1.root()));
-			System.out.println("Altura del nodo" + " " + "h0" + " " + "en el árbol T: " + altura(b1, h0));
-			System.out.println("----------------------------");
-
-			System.out.println(camino(b1, h5, h1));
-			System.out.println("----------------------------");
-			 */
-			BinaryTree<Integer> b2 = new ArbolBinarioEnlazado<Integer>();
-
-			Position<Integer> j0 = b2.createRoot(62);
-			Position<Integer> j1 = b2.addLeft(j0, 929);
-			Position<Integer> j2 = b2.addLeft(j1, 2452);
-			Position<Integer> j3 = b2.addRight(j1, 7532);
-
-			System.out.println(b1.positions().toString());
-			por_niveles(b1);
-			System.out.println("----------------");
-			System.out.println(b2.positions().toString());
-			por_niveles(b2);
-
-			System.out.println(subarbol(b1, b2));
-
-		} catch (InvalidOperationException | InvalidPositionException e) {
-			e.printStackTrace();
-		}
-	}
 
 	//EJERCICIO (a)
 	public static <E> void preorden (BinaryTree<E> t) {
@@ -453,11 +413,11 @@ public class Operaciones_con_arboles_binarios {
 
 		return sonIguales;
 	}
-	
+
 	public static <E> BinaryTree<E> clonar_arbol_perfecto(int h, PositionList<E> l) {
 		return null;
 	}
-	
+
 	public <E> boolean es_AVL(BinaryTree<E> b) {
 		boolean es_avl = true;
 		try {
@@ -498,7 +458,129 @@ public class Operaciones_con_arboles_binarios {
 		catch (TDAArbolBinario.InvalidPositionException | BoundaryViolationException err) {
 			err.printStackTrace();
 		}
-		
+
 		return esavl;
+	}
+
+
+	public static void main(String args[]) {
+		ArbolBinarioEnlazado<Integer> b1 = new ArbolBinarioEnlazado<Integer>();
+		try {
+	
+			Position<Integer> h0 = b1.createRoot(2);
+			Position<Integer> h1 = b1.addLeft(h0, 66);
+			Position<Integer> h2 = b1.addRight(h0, 62);
+			Position<Integer> h3 = b1.addLeft(h2, 929);
+			Position<Integer> h5 = b1.addRight(h3, 7532);
+			Position<Integer> h8 = b1.addLeft(h3, 2452);
+			Position<Integer> h10 = b1.addRight(h8, 555543);
+			Position<Integer> h6 = b1.addLeft(h5, 42032);
+			Position<Integer> h7 = b1.addLeft(h1, 1145);
+	
+			/*preorden(b1);
+			System.out.println("-----------------------------");
+			postorden(b1);
+			System.out.println("-----------------------------");
+			por_niveles(b1);
+			System.out.println("-----------------------------");
+			System.out.println("Profundidad del nodo" + " " + "h0" + " " + "en el árbol T: " + profundidad(b1, b1.root()));
+			System.out.println("Altura del nodo" + " " + "h0" + " " + "en el árbol T: " + altura(b1, h0));
+			System.out.println("----------------------------");
+	
+			System.out.println(camino(b1, h5, h1));
+			System.out.println("----------------------------");
+			 */
+			
+			/*
+			BinaryTree<Integer> b2 = new ArbolBinarioEnlazado<Integer>();
+	
+			Position<Integer> j0 = b2.createRoot(62);
+			Position<Integer> j1 = b2.addLeft(j0, 929);
+			Position<Integer> j2 = b2.addLeft(j1, 2452);
+			Position<Integer> j3 = b2.addRight(j1, 7532);
+	
+			System.out.println(b1.positions().toString());
+			por_niveles(b1);
+			System.out.println("----------------");
+			System.out.println(b2.positions().toString());
+			por_niveles(b2);
+	
+			System.out.println(subarbol(b1, b2));
+			*/
+			
+			System.out.println(huffman("aaaaaabbbaaaaaccd").positions().toString());
+	
+		} catch (InvalidOperationException | InvalidPositionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static Map<Character, Float> calcularFrecuenciaApariciones(Queue<Character> q) {
+
+		Map<Character, Float> m = new Mapeo_con_lista<Character, Float>();
+		Map<Character, Float> resultado = new Mapeo_con_lista<Character, Float>();
+		int cantidadTotalCaracteres = q.size();
+		Float cantApariciones = 0f;
+		char c = ' ';
+
+		try {
+
+			while (!q.isEmpty()) {
+				c = q.dequeue();
+				cantApariciones = m.get(c);
+				if (cantApariciones == null)
+					m.put(c, 1f);
+				else
+					m.put(c, cantApariciones + 1);
+			}
+
+			for (Entry<Character, Float> e : m.entries()) {
+				resultado.put(e.getKey(), e.getValue()/cantidadTotalCaracteres);
+			}
+
+		}
+		catch (EmptyQueueException | InvalidKeyException e) {
+			e.printStackTrace();
+		}
+		return resultado;
+	}
+
+	public static BinaryTree<Character> huffman(String X){
+		Queue<Character> cola_X = new TDACola.Cola_con_enlaces<>();
+		PriorityQueue<Float, BinaryTree<Character>> Q = new TDAColaCP.ColaCP_con_lista<>();
+		BinaryTree<Character> a_retornar = null;
+		try {
+			for (int i=0; i < X.length(); i++) {
+				cola_X.enqueue(X.charAt(i));
+			}
+
+			Map<Character, Float> frecAp = calcularFrecuenciaApariciones(cola_X);
+
+			for (int i=0; i < X.length(); i++) {
+				BinaryTree<Character> T = new ArbolBinarioEnlazado<>();
+				T.createRoot(X.charAt(i));
+				Q.insert(frecAp.get(X.charAt(i)), T);
+			}
+
+			while (Q.size() > 1) {
+				Float f1 = Q.min().getKey();
+				BinaryTree<Character> T1 = Q.removeMin().getValue();
+
+				Float f2 = Q.min().getKey();
+				BinaryTree<Character> T2 = Q.removeMin().getValue();
+
+				BinaryTree<Character> T = new ArbolBinarioEnlazado<Character>();
+				T.createRoot('|');
+				T.attach(T.root(), T1, T2);
+				Q.insert(f1+f2, T);
+			}
+			
+			a_retornar = Q.removeMin().getValue();
+		}
+		catch (Exception err) {
+			err.printStackTrace();
+		}
+
+		return a_retornar;
 	}
 }
